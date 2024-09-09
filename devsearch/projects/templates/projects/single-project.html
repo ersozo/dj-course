@@ -3,9 +3,16 @@
 
 {% block content %}
 
-<p>Hello, you are on the {{ message }} </p>
+<h1>{{ projectObj.title}}</h1>
 
-<h1>{{ project.title}}</h1>
+<hr>
+
+{% for tag in projectObj.tags.all %}
+    <span style="border:1px solid grey">{{ tag}}</span>
+{% endfor %}
+
+<hr>
+
 <br>
-<p>{{ project.description }}</p>
+<p>{{ projectObj.description }}</p>
 {% endblock content %}

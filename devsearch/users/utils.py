@@ -1,5 +1,6 @@
 from django.db.models import Q
 from .models import Profile, Skill
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def search_profiles(request):
@@ -17,3 +18,32 @@ def search_profiles(request):
     )
 
     return profiles, search_query
+
+
+def paginate_profiles(request, profiles, results):
+    # page = request.GET.get("page")
+    # paginator = Paginator(profiles, results)
+
+    # try:
+    #     profiles = paginator.page(page)
+    # except PageNotAnInteger:
+    #     page = 1
+    #     profiles = paginator.page(page)
+    # except EmptyPage:
+    #     page = paginator.num_pages
+    #     profiles = paginator.page(page)
+
+    # left_index = int(page) - 4
+
+    # if left_index < 1:
+    #     left_index = 1  # 1 is the first page
+
+    # right_index = int(page) + 5  # 5 is the last page
+
+    # if right_index > paginator.num_pages:
+    #     right_index = paginator.num_pages + 1
+
+    # custom_range = range(left_index, right_index)
+
+    # return profiles, custom_range
+    pass

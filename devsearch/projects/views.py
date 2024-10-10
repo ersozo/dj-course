@@ -1,16 +1,16 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .models import Project
 from .forms import ProjectForm
-from .utils import search_projects
+from .utils import search_projects, paginate_projects
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 
 
 def projects(request):
     projects, search_query = search_projects(request)
-
-    page = request.GET.get("page")
+    # custom_range, projects = paginate_projects(request, projects, 6)
     results = 3
+    page = request.GET.get("page")
     paginator = Paginator(projects, results)
 
     try:
@@ -22,11 +22,25 @@ def projects(request):
         page = paginator.num_pages
         projects = paginator.page(page)
 
+    left_index = int(page) - 4
+
+    if left_index < 1:
+        left_index = 1  # 1 is the first page
+
+    right_index = int(page) + 5  # 5 is the last page
+
+    if right_index > paginator.num_pages:
+        right_index = paginator.num_pages + 1
+
+    custom_range = range(left_index, right_index)
+
     context = {
         "projects": projects,
         "search_query": search_query,
+        "custom_range": custom_range,
         "paginator": paginator,
     }
+
     return render(
         request=request, template_name="projects/projects.html", context=context
     )

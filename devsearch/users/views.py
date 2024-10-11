@@ -6,7 +6,6 @@ from django.contrib.auth.decorators import login_required
 from .models import Profile
 from .forms import CustomUserCreationForm, ProfileForm, SkillForm
 from .utils import search_profiles, paginate_profiles
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # Create your views here.
@@ -67,31 +66,7 @@ def register_user(request):
 def profiles(request):
     profiles, search_query = search_profiles(request)
 
-    # custom_range, profiles = paginate_profiles(request, profiles, 1)
-    results = 1
-    page = request.GET.get("page")
-    paginator = Paginator(profiles, results)
-
-    try:
-        profiles = paginator.page(page)
-    except PageNotAnInteger:
-        page = 1
-        profiles = paginator.page(page)
-    except EmptyPage:
-        page = paginator.num_pages
-        profiles = paginator.page(page)
-
-    left_index = int(page) - 4
-
-    if left_index < 1:
-        left_index = 1  # 1 is the first page
-
-    right_index = int(page) + 5  # 5 is the last page
-
-    if right_index > paginator.num_pages:
-        right_index = paginator.num_pages + 1
-
-    custom_range = range(left_index, right_index)
+    custom_range, profiles = paginate_profiles(request, profiles, 3)
 
     context = {
         "profiles": profiles,

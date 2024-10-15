@@ -11,7 +11,7 @@
                     <h3>Register an Account</h3>
                     <p>Create a new developer account</p>
                 </div>
-                <form action="{% url 'register' %}" method="post" class="form auth__form">
+                <form action="" method="post" class="form auth__form">
                     {% csrf_token %}
                     {% for field in form %}
                         <div class="form__field">

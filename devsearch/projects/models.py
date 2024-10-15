@@ -5,7 +5,7 @@ from users.models import Profile
 
 # Create your models here.
 class Project(models.Model):
-    owner = models.ForeignKey(Profile, on_delete=models.SET_NULL, null=True, blank=True)
+    owner = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, blank=True)
     title = models.CharField(max_length=200)
     description = models.TextField(null=True, blank=True)
     featured_image = models.ImageField(null=True, blank=True, default="default.jpg")
@@ -24,7 +24,24 @@ class Project(models.Model):
         return self.title
 
     class Meta:
-        ordering = ["created"]
+        ordering = ["-vote_ratio", "-vote_total", "title"]
+
+    @property
+    def reviewers(self):
+        queryset = self.review_set.all().values_list("owner__id", flat=True)
+        return queryset
+
+    @property
+    def getVoteCount(self):
+        reviews = self.review_set.all()
+        upVotes = reviews.filter(value="up").count()
+        totalVotes = reviews.count()
+
+        ratio = (upVotes / totalVotes) * 100
+        self.vote_total = totalVotes
+        self.vote_ratio = ratio
+
+        self.save()
 
 
 class Review(models.Model):

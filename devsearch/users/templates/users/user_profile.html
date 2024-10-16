@@ -1,5 +1,4 @@
 {% extends 'main.html' %}
-
 {% block content %}
   <!-- Main Section -->
   <main class="profile my-md">
@@ -8,10 +7,10 @@
         <div class="column column--1of3">
           <div class="card text-center">
             <div class="card__body dev">
-              <img class="avatar avatar--xl" src="{{profile.profile_image.url}}" />
-              <h2 class="dev__name">{{profile.name}}</h2>
-              <p class="dev__title">{{profile.short_intro}}</p>
-              <p class="dev__location">Based in {{profile.location}}</p>
+              <img class="avatar avatar--xl" src="{{ profile.profile_image.url }}" />
+              <h2 class="dev__name">{{ profile.name }}</h2>
+              <p class="dev__title">{{ profile.short_intro }}</p>
+              <p class="dev__location">Based in {{ profile.location }}</p>
               <ul class="dev__social">
                 <li>
                   <a title="Github" href="#" target="_blank"><i class="im im-github"></i></a>
@@ -29,8 +28,10 @@
                   <a title="Personal Website" href="#" target="_blank"><i class="im im-globe"></i></a>
                 </li>
               </ul>
-              
-              <a href="#" class="btn btn--sub btn--lg">Send Message </a>
+              {% if request.user.profile.id != profile.id %}
+                <a href="{% url 'create-message' profile.id %}"
+                   class="btn btn--sub btn--lg">Send Message</a>
+              {% endif %}
             </div>
           </div>
         </div>
@@ -49,19 +50,18 @@
           <div class="devInfo">
             <h3 class="devInfo__title">Skills</h3>
             <div class="devInfo__skills">
-                {% for skill in top_skills %}
+              {% for skill in top_skills %}
                 <div class="devSkill">
-                    <h4 class="devSkill__title">{{skill.name}}</h4>
-                    <p class="devSkill__info">{{skill.description}}                    </p>
+                  <h4 class="devSkill__title">{{ skill.name }}</h4>
+                  <p class="devSkill__info">{{ skill.description }}</p>
                 </div>
-                {% endfor %}
-
+              {% endfor %}
               <h3 class="devInfo__subtitle">Other Skills</h3>
               <div class="devInfo__otherSkills">
                 {% for skill in other_skills %}
-                <span class="tag tag--pill tag--sub tag--lg">
-                    <small>{{skill}}</small>
-                </span>
+                  <span class="tag tag--pill tag--sub tag--lg">
+                    <small>{{ skill }}</small>
+                  </span>
                 {% endfor %}
               </div>
             </div>
@@ -69,35 +69,39 @@
           <div class="devInfo">
             <h3 class="devInfo__title">Projects</h3>
             <div class="grid grid--two">
-            {% for project in profile.project_set.all %}
-            <div class="column">
-                <div class="card project">
+              {% for project in profile.project_set.all %}
+                <div class="column">
+                  <div class="card project">
                     <a href="{% url 'single-project' project.id %}" class="project">
-                    <img class="project__thumbnail" src="{{project.featured_image.url}}" alt="project thumbnail" />
-                    <div class="card__body">
-                      <h3 class="project__title">{{projet.title}}</h3>
-                      <p><a class="project__author" href="{% url 'user-profile' project.owner.id %}">By {{project.owner.name}}</a></p>
-                      <p class="project--rating">
-                        <span style="font-weight: bold;">{{project.vote_ratio}}%</span> Postitive
-                        Feedback ({{project.vote_total}} Vote{{project.vote_total|pluralize:"s"}})
-                      </p>
-                      <div class="project__tags">
-                        {% for tag in project.tags.all %}
-                        <span class="tag tag--pill tag--main">
-                            <small>{{tag}}</small>
-                        </span>
-                        {% endfor %}
+                      <img class="project__thumbnail"
+                           src="{{ project.featured_image.url }}"
+                           alt="project thumbnail" />
+                      <div class="card__body">
+                        <h3 class="project__title">{{ projet.title }}</h3>
+                        <p>
+                          <a class="project__author"
+                             href="{% url 'user-profile' project.owner.id %}">By {{ project.owner.name }}</a>
+                        </p>
+                        <p class="project--rating">
+                          <span style="font-weight: bold;">{{ project.vote_ratio }}%</span> Postitive
+                          Feedback ({{ project.vote_total }} Vote{{ project.vote_total|pluralize:"s" }})
+                        </p>
+                        <div class="project__tags">
+                          {% for tag in project.tags.all %}
+                            <span class="tag tag--pill tag--main">
+                              <small>{{ tag }}</small>
+                            </span>
+                          {% endfor %}
+                        </div>
                       </div>
-                    </div>
-                </a>
-            </div>
-        </div>
-        {% endfor %}
+                    </a>
+                  </div>
+                </div>
+              {% endfor %}
             </div>
           </div>
         </div>
       </div>
     </div>
   </main>
-
 {% endblock content %}

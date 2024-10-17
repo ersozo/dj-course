@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from .models import Profile
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
+from django.core.mail import send_mail
+from django.conf import settings
 # Create your models here.
 
 
@@ -12,7 +14,20 @@ def create_profile(sender, instance, created, **kwargs):
         profile = Profile.objects.create(
             user=user, username=user.username, email=user.email, name=user.first_name
         )
-        profile.save()
+
+        subject = "Welcome to DevSearch"
+        message = "We are glad you joined us. Thank you"
+
+        try:
+            send_mail(
+                subject,
+                message,
+                settings.EMAIL_HOST_USER,
+                [profile.email],
+                fail_silently=False,
+            )
+        except:
+            print("Email failed to send...")
 
 
 def update_user(sender, instance, created, **kwargs):

@@ -121,7 +121,7 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "bzdboyahane@gmail.com"
-EMAIL_HOST_PASSWORD = ""
+EMAIL_HOST_PASSWORD = "4qX!iVh@^F83H%PT"
 
 
 # Static files (CSS, JavaScript, Images)

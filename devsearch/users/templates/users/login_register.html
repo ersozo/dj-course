@@ -37,7 +37,7 @@
     <div class="auth">
         <div class="card">
             <div class="auth__header text-center">
-                <a href="/">
+                <a href="">
                     <img src="{% static 'images/icon.svg' %}" alt="icon" />
                 </a>
                 <h3>Account Login</h3>
@@ -65,7 +65,7 @@
                 </div>
                 <div class="auth__actions">
                     <input class="btn btn--sub btn--lg" type="submit" value="Log In" />
-                    <a href="forgetpassword.html">Forget Password?</a>
+                    <a href="{% url 'reset_password' %}">Forget Password?</a>
                 </div>
             </form>
             <div class="auth__alternative">
